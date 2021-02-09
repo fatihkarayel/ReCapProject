@@ -3,6 +3,7 @@ using Entitites.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DataAccess.Concrete.InMemory
@@ -14,14 +15,14 @@ namespace DataAccess.Concrete.InMemory
         {
             _brands = new List<Brand>
             {
-                new Brand {BrandId=1, BrandName="Siyah"},
-                new Brand {BrandId=2, BrandName="Beyaz"},
-                new Brand {BrandId=3, BrandName="Kırmızı"}
+                new Brand {Id=1, Name="Siyah"},
+                new Brand {Id=2, Name="Beyaz"},
+                new Brand {Id=3, Name="Kırmızı"}
             };
         }
         public void Add(Brand brand)
         {
-            brand.BrandId = _brands.Last().BrandId + 1;//listedeki son id nin üstüne +1 yapıyoruz. Bu kısım DB tarafında AutoIncrement özelliği ile de yönetilebilir. Ama inMemory olunca burada yapıyoruz.
+            brand.Id = _brands.Last().Id + 1;//listedeki son id nin üstüne +1 yapıyoruz. Bu kısım DB tarafında AutoIncrement özelliği ile de yönetilebilir. Ama inMemory olunca burada yapıyoruz.
            
             _brands.Add(brand);
             Console.WriteLine("Marka silindi");
@@ -29,9 +30,14 @@ namespace DataAccess.Concrete.InMemory
 
         public void Delete(Brand brand)
         {
-            Brand brandToDelete = _brands.SingleOrDefault(b => b.BrandId == brand.BrandId);
+            Brand brandToDelete = _brands.SingleOrDefault(b => b.Id == brand.Id);
             _brands.Remove(brandToDelete);
             Console.WriteLine("Marka silindi");
+        }
+
+        public Brand Get(Expression<Func<Brand, bool>> filter)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Brand> GetAll()
@@ -40,16 +46,21 @@ namespace DataAccess.Concrete.InMemory
             return _brands;
         }
 
+        public List<Brand> GetAll(Expression<Func<Brand, bool>> filter = null)
+        {
+            return _brands;
+        }
+
         public Brand GetById(int brandId)
         {
-            Brand brandToGetByID = _brands.SingleOrDefault(b=> b.BrandId==brandId);
+            Brand brandToGetByID = _brands.SingleOrDefault(b=> b.Id==brandId);
             return brandToGetByID;
         }
 
         public void Update(Brand brand)
         {
-            Brand brandToUpdate = _brands.SingleOrDefault(b=> b.BrandId == brand.BrandId);
-            brandToUpdate.BrandName = brand.BrandName;
+            Brand brandToUpdate = _brands.SingleOrDefault(b=> b.Id == brand.Id);
+            brandToUpdate.Name = brand.Name;
         }
     }
 }

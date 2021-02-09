@@ -20,7 +20,7 @@ namespace Business.Conrete
         }
         public Car GetById(int carId)
         {
-            return _carDal.GetById(carId);
+            return _carDal.Get(p=> p.Id == carId);
         }
         public void Delete(Car car)
         {
@@ -28,15 +28,38 @@ namespace Business.Conrete
         }
         public void Add(Car car)
         {
-            _carDal.Add(car);
+            if (car.Name.Length>2)
+            {
+                if (car.DailyPrice>0)
+                {
+                    _carDal.Add(car);
+                    Console.WriteLine("Araba eklendi");
+                }
+                else
+                {
+                    Console.WriteLine("Arabanın günlük fiyatı sıfırdan büyük olmalı!");
+                }                             
+            }
+            else
+            {
+                Console.WriteLine("Arabanın ismi en az üç karakter olmalı!");
+            }
+            
+            
         }
         public void Update(Car car)
         {
             _carDal.Update(car);
         }
-        public List<Car> GetByBrand(int brandId)
+
+        public List<Car> GetCarsByBrandId(int brandId)
         {
-            return _carDal.GetByBrand(brandId);
+            return _carDal.GetAll(p => p.BrandId == brandId);
+        }
+
+        public List<Car> GetCarsByColorId(int colorId)
+        {
+            return _carDal.GetAll(p => p.ColorId == colorId);
         }
     }
 }
