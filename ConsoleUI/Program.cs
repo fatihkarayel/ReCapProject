@@ -1,5 +1,5 @@
 ﻿using Business.Conrete;
-using DataAccess.Concrete.InMemory;
+using DataAccess.Concrete.EntityFramework;
 using Entitites.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,8 +10,8 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            CarManager carManager = new CarManager(new InMemoryCarDal());
-            BrandManager brandManager = new BrandManager(new InMemoryBrandDal());
+            CarManager carManager = new CarManager(new EfCarDal());
+            //BrandManager brandManager = new BrandManager(new EfBrandDal());
 
             bool loop = true;
             while (loop)
@@ -67,18 +67,26 @@ namespace ConsoleUI
         }
         private static void AddCar(CarManager carManager)
         {
+            Console.WriteLine("Arabanın Adı? ");
+            string name = Console.ReadLine();
+
             Console.WriteLine("Brand Id? ");
             int brandId = Convert.ToInt32(Console.ReadLine());
+
             Console.WriteLine("Color Id? ");
             int colorId = Convert.ToInt32(Console.ReadLine());
+
             Console.WriteLine("Model Yıl? ");
             int modelYear = Convert.ToInt32(Console.ReadLine());
+
             Console.WriteLine("Günlük Kiralama Ücreti? ");
-            double dailyPrice = Convert.ToDouble(Console.ReadLine());
+            decimal dailyPrice = Convert.ToDecimal(Console.ReadLine());
+
             Console.WriteLine("Açıklama? ");
             string description = Console.ReadLine();
-            carManager.Add(new Car {BrandId = brandId, ColorId = colorId, ModelYear = modelYear, Description= description, DailyPrice = dailyPrice});
-            Console.WriteLine("Araç eklendi.");
+
+            carManager.Add(new Car {Name= name, BrandId = brandId, ColorId = colorId, ModelYear = modelYear, Description= description, DailyPrice = dailyPrice});
+
         }
         private static void DeleteCar(CarManager carManager)
         {
@@ -91,16 +99,11 @@ namespace ConsoleUI
             Console.WriteLine("{0} Id li, {1} markalı araç silindi!" , carToDelete, car.BrandId);
         }
         private static void GetAllCars(CarManager carManager)
-        {            
+        {
+            Console.WriteLine("ID\tName\tBrand\tColor\tModel\tPrice\tDesc");
             foreach (var car in carManager.GetAll())
             {
-                Console.WriteLine(
-                    "ID: " + car.Id +" | "+ 
-                    "Brand: " + car.BrandId + " | " + 
-                    "Color: "+ car.ColorId + " | " + 
-                    "Model Year: " + car.ModelYear + " | " +
-                    "Desc: " + car.Description + " | " + 
-                    "Price: "+car.DailyPrice);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}", car.Id,car.Name,car.BrandId,car.ColorId,car.ModelYear,car.DailyPrice,car.Description);
             }
             
         }
@@ -137,7 +140,7 @@ namespace ConsoleUI
             Console.WriteLine("Yeni Model Yıl? ");
             int modelYear = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Yeni Günlük Kiralama Ücreti? ");
-            double dailyPrice = Convert.ToDouble(Console.ReadLine());
+            decimal dailyPrice = Convert.ToDecimal(Console.ReadLine());
             Console.WriteLine("Yeni Açıklama? ");
             string description = Console.ReadLine();
             carManager.Update(new Car { Id = carId, BrandId = brandId, ColorId = colorId, ModelYear = modelYear, Description = description, DailyPrice = dailyPrice });
@@ -149,7 +152,7 @@ namespace ConsoleUI
             Console.WriteLine("BrandId? ");
             int carsToGetByBrand = Convert.ToInt32(Console.ReadLine());
             ;
-            foreach (var car in carManager.GetByBrand(carsToGetByBrand))
+            foreach (var car in carManager.GetCarsByBrandId(carsToGetByBrand))
             {
                 Console.WriteLine(
                     "ID: " + car.Id + " | " +
