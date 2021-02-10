@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MyFinalProject\Core\Core.csproj" />
     <ProjectReference Include="..\Entitites\Entitites.csproj" />
   </ItemGroup>
 

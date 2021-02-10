@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstarct;
 using Entitites.Concrete;
+using Entitites.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Business.Conrete
         }
         public Car GetById(int carId)
         {
-            return _carDal.Get(p=> p.Id == carId);
+            return _carDal.Get(c=> c.Id == carId);
         }
         public void Delete(Car car)
         {
@@ -60,6 +61,11 @@ namespace Business.Conrete
         public List<Car> GetCarsByColorId(int colorId)
         {
             return _carDal.GetAll(p => p.ColorId == colorId);
+        }
+
+        public List<CarDetailDTO> GetCarDetails()
+        {
+            return _carDal.GetCarDetails();
         }
     }
 }

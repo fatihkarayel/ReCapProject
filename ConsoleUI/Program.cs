@@ -11,7 +11,8 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
             CarManager carManager = new CarManager(new EfCarDal());
-            //BrandManager brandManager = new BrandManager(new EfBrandDal());
+            BrandManager brandManager = new BrandManager(new EfBrandDal());
+            ColorManager colorManager = new ColorManager(new EfColorDal());
 
             bool loop = true;
             while (loop)
@@ -25,6 +26,11 @@ namespace ConsoleUI
                 Console.WriteLine("[4] Add a new car");
                 Console.WriteLine("[5] Update a car's info");
                 Console.WriteLine("[6] Delete a car");
+                Console.WriteLine("[7] List Brands");
+                Console.WriteLine("[8] Add new Brand");
+                Console.WriteLine("[9] List Colors");
+                Console.WriteLine("[10] Add new Color");
+                Console.WriteLine("[11] Delete Brand");
                 Console.WriteLine("[99] Exit");
                 Console.WriteLine("\nBir İşlem seçiniz.....");
                 int choise = Convert.ToInt32(Console.ReadLine());
@@ -32,7 +38,7 @@ namespace ConsoleUI
                 switch (choise)
                 {
                     case 1:
-                        GetAllCars(carManager);
+                        GetCarDetails(carManager);
                         Console.ReadKey();
                         break;
                     case 2:
@@ -55,6 +61,26 @@ namespace ConsoleUI
                         DeleteCar(carManager);
                         Console.ReadKey();
                         break;
+                    case 7:
+                        GetAllBrand(brandManager);
+                        Console.ReadKey();
+                        break;
+                    case 8:
+                        AddBrand(brandManager);
+                        Console.ReadKey();
+                        break;
+                    case 9:
+                        GetAllColor(colorManager);
+                        Console.ReadKey();
+                        break;
+                    case 10:
+                        AddColor(colorManager);
+                        Console.ReadKey();
+                        break;
+                    case 11:
+                        DeleteBrand(brandManager);
+                        Console.ReadKey();
+                        break;
                     case 99:
                         Console.WriteLine("Hope you enjoy your program.\nSee you again...");
                         loop = false;
@@ -63,6 +89,46 @@ namespace ConsoleUI
                     default:
                         break;
                 }
+            }
+        }
+        private static void AddBrand(BrandManager brandManager)
+        {
+            GetAllBrand(brandManager);
+            Console.WriteLine("Bir Marka Adı giriniz: ");
+            string name = Console.ReadLine();
+            brandManager.Add(new Brand {Name=name });
+        }
+        private static void DeleteBrand(BrandManager brandManager) 
+        {
+            GetAllBrand(brandManager);
+            Console.WriteLine("Silinecek Marka Id değerini girin: ");
+            int deletedBrand = Convert.ToInt32(Console.ReadLine());
+            Brand brand = brandManager.GetById(deletedBrand);
+            brandManager.Delete(brand); //new Brand {Id=deletedBrand }
+
+        }
+
+        private static void GetAllBrand(BrandManager brandManager)
+        {
+            Console.WriteLine("Marka Listesi");
+            foreach (var brand in brandManager.GetAllBrand())
+            {
+                Console.WriteLine("[{0}] {1}",brand.Id, brand.Name);
+            }
+        }
+        private static void AddColor(ColorManager colorManager)
+        {
+            GetAllColor(colorManager);
+            Console.WriteLine("Bir Renk Adı giriniz: ");
+            string name = Console.ReadLine();
+           colorManager.Add(new Color { Name = name });
+        }
+        private static void GetAllColor(ColorManager colorManager)
+        {
+            Console.WriteLine("Renk Listesi");
+            foreach (var color in colorManager.GetAllColor())
+            {
+                Console.WriteLine("[{0}] {1}", color.Id, color.Name);
             }
         }
         private static void AddCar(CarManager carManager)
@@ -90,7 +156,7 @@ namespace ConsoleUI
         }
         private static void DeleteCar(CarManager carManager)
         {
-            GetAllCars(carManager);
+            GetCarDetails(carManager);
             Console.WriteLine("Silinecek aracın Id değeri? ");
             int carToDelete = Convert.ToInt32(Console.ReadLine());
             Car car = carManager.GetById(carToDelete);
@@ -98,12 +164,12 @@ namespace ConsoleUI
             carManager.Delete(new Car { Id = carToDelete });
             Console.WriteLine("{0} Id li, {1} markalı araç silindi!" , carToDelete, car.BrandId);
         }
-        private static void GetAllCars(CarManager carManager)
+        private static void GetCarDetails(CarManager carManager)
         {
-            Console.WriteLine("ID\tName\tBrand\tColor\tModel\tPrice\tDesc");
-            foreach (var car in carManager.GetAll())
+            Console.WriteLine("ID\tName\tBrand\tColor\tYıl\tPrice\tDesc");
+            foreach (var car in carManager.GetCarDetails())
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}", car.Id,car.Name,car.BrandId,car.ColorId,car.ModelYear,car.DailyPrice,car.Description);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}", car.CarId,car.Name,car.BrandName,car.ColorName,car.ModelYear,car.DailyPrice,car.Description);
             }
             
         }
