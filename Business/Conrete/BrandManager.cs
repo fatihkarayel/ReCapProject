@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstarct;
 using Entitites.Concrete;
 using System;
@@ -14,32 +16,39 @@ namespace Business.Conrete
         {
             _brandDal = brandDal;
         }
-        public void Add(Brand brand)
+        public IResult Add(Brand brand)
         {
+            if (brand.Name.Length<2)
+            {
+                return new ErrorResult(Messages.BrandNameInvalid);
+            }
             _brandDal.Add(brand);
-            Console.WriteLine("Marka Eklendi: " + brand.Name);
+            return new SuccessResult(Messages.BrandAdded);
+            //Console.WriteLine("Marka Eklendi: " + brand.Name);
         }
 
-        public void Delete(Brand brand)
+        public IResult Delete(Brand brand)
         {
             _brandDal.Delete(brand);
-            Console.WriteLine("Marka Silindi: " + brand.Name);
+            return new SuccessResult(Messages.BrandDeleted);
+            //Console.WriteLine("Marka Silindi: " + brand.Name);
         }
 
-        public List<Brand> GetAllBrand()
+        public IDataResult<List<Brand>> GetAllBrand()
         {
-            return _brandDal.GetAll();
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(),Messages.BrandsListed);
         }
 
-        public Brand GetById(int brandId)
+        public IDataResult<Brand> GetById(int brandId)
         {
             //select * from dbo.Categories where Id=3
-            return _brandDal.Get(b=> b.Id==brandId);
+            return new SuccessDataResult<Brand>(_brandDal.Get(b=> b.Id==brandId),Messages.BrandDetail);
         }
 
-        public void Update(Brand brand)
+        public IResult Update(Brand brand)
         {
             _brandDal.Update(brand);
+            return new SuccessResult(Messages.BrandUpdated);
         }
     }
 }
