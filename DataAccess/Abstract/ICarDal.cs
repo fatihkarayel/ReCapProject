@@ -1,4 +1,5 @@
-﻿using Entitites.Concrete;
+﻿using Core.DataAccess;
+using Entitites.Concrete;
 using Entitites.DTOs;
 using System;
 using System.Collections.Generic;

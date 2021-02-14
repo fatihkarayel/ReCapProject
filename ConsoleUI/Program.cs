@@ -13,6 +13,9 @@ namespace ConsoleUI
             CarManager carManager = new CarManager(new EfCarDal());
             BrandManager brandManager = new BrandManager(new EfBrandDal());
             ColorManager colorManager = new ColorManager(new EfColorDal());
+            UserManager userManager = new UserManager(new EfUserDal());
+            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
 
             bool loop = true;
             while (loop)
@@ -31,6 +34,11 @@ namespace ConsoleUI
                 Console.WriteLine("[9] List Colors");
                 Console.WriteLine("[10] Add new Color");
                 Console.WriteLine("[11] Delete Brand");
+                Console.WriteLine("[12] Add new User");
+                Console.WriteLine("[13] List Users");
+                Console.WriteLine("[14] Delete Users");
+                Console.WriteLine("[15] Rent a Car");
+                Console.WriteLine("[16] List Rentals");
                 Console.WriteLine("[99] Exit");
                 Console.WriteLine("\nBir İşlem seçiniz.....");
                 int choise = Convert.ToInt32(Console.ReadLine());
@@ -81,6 +89,26 @@ namespace ConsoleUI
                         DeleteBrand(brandManager);
                         Console.ReadKey();
                         break;
+                    case 12:
+                        AddUser(userManager);
+                        Console.ReadKey();
+                        break;
+                    case 13:
+                        GetAllUsers(userManager);
+                        Console.ReadKey();
+                         break;
+                    case 14:
+                        DeleteUser(userManager);
+                        Console.ReadKey();
+                        break;
+                    case 15:
+                        RentCar(rentalManager);
+                        Console.ReadKey();
+                        break;
+                    case 16:
+                        GetRentals(rentalManager);
+                        Console.ReadKey();
+                        break;
                     case 99:
                         Console.WriteLine("Hope you enjoy your program.\nSee you again...");
                         loop = false;
@@ -91,6 +119,68 @@ namespace ConsoleUI
                 }
             }
         }
+
+        private static void RentCar(RentalManager rentalManager)
+        {
+            GetRentals(rentalManager);
+            Console.WriteLine("Kiralanacak Aracın id değerini girin.");
+            int carId = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Müşteri Id değerini girin. ");
+            int customerId = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Kira başlangıç tarihini girin. ");
+            DateTime rentDate= Convert.ToDateTime(Console.ReadLine());
+            var result = rentalManager.Add(new Rental { CarId = carId, CustomerId = customerId, RentDate = rentDate });
+            Console.WriteLine(result.Message);
+        }
+        private static void GetRentals(RentalManager rentalManager)
+        {
+            var result = rentalManager.GetRentalDetails();
+            if (result.Success)
+            {
+                foreach (var rental in result.Data)
+                {
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", rental.Id, rental.CarName, rental.FirstName, rental.LastName, rental.RentDate, rental.ReturnDate);
+                }
+                Console.WriteLine(result.Message);
+
+            }
+
+        }
+        private static void GetAllUsers(UserManager userManager)
+        {
+            var result = userManager.GetAll();
+            if (result.Success)
+            {
+                foreach (var user in result.Data)
+                {
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}", user.Id, user.FirstName, user.LastName, user.Email);
+                }
+                Console.WriteLine(result.Message);
+            }
+        }
+
+        private static void AddUser(UserManager userManager)
+        {
+            Console.WriteLine("Adı: ");
+            string firstName = Console.ReadLine();
+            Console.WriteLine("Soyadı: ");
+            string lastName = Console.ReadLine();
+            Console.WriteLine("E-Mail: ");
+            string mail = Console.ReadLine();
+            var result = userManager.Add(new User {FirstName=firstName, LastName=lastName, Email=mail });
+            Console.WriteLine(result.Message);
+            GetAllUsers(userManager);
+        }
+        private static void DeleteUser(UserManager userManager)
+        {
+            GetAllUsers(userManager);
+            Console.WriteLine("Silinecek Kullanıcı Id değerini girin.");
+            var deletedUser = Convert.ToInt32(Console.ReadLine());
+            var user = userManager.GetById(deletedUser).Data;
+            var result = userManager.Delete(new User {Id=user.Id });
+            Console.WriteLine(result.Message);
+        }
+
         private static void AddBrand(BrandManager brandManager)
         {
             GetAllBrand(brandManager);
@@ -99,6 +189,7 @@ namespace ConsoleUI
             string name = Console.ReadLine();
             var result = brandManager.Add(new Brand { Name = name });
             Console.WriteLine(result.Message);
+            GetAllBrand(brandManager);
 
 
             //if (result.Success)
@@ -183,17 +274,8 @@ namespace ConsoleUI
             var result = carManager.Delete(new Car { Id = carToDelete });
             Console.WriteLine(result.Message);
         }
-        private static void GetCarDetails(CarManager carManager)
-        {
-            Console.WriteLine("ID\tName\tBrand\tColor\tYıl\tPrice\tDesc");
-            var result = carManager.GetCarDetails();
-            foreach (var car in result.Data)
-            {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}", car.CarId,car.Name,car.BrandName,car.ColorName,car.ModelYear,car.DailyPrice,car.Description);
-            }
-            Console.WriteLine(result.Message);
-            
-        }
+
+
         private static void GetCarById(CarManager carManager)
         {
             Console.WriteLine("Araç Id? ");
@@ -245,14 +327,16 @@ namespace ConsoleUI
             var result = carManager.GetCarsByBrandId(carsToGetByBrand);
             foreach (var car in result.Data)
             {
-                Console.WriteLine(
-                    "ID: " + car.Id + " | " +
-                    "Brand: " + car.BrandId + " | " +
-                    "Color: " + car.ColorId + " | " +
-                    "Model Year: " + car.ModelYear + " | " +
-                    "Desc: " + car.Description + " | " +
-                    "Price: " + car.DailyPrice);
+                Console.WriteLine("{0}\t {1}\t {2}\t {3}\t {4}", car.Id, car.Name, car.ModelYear, car.ColorId, car.BrandId);
             }
+
+            Console.WriteLine(result.Message);
+        }
+        private static void GetCarDetails(CarManager carManager)
+        {
+            //Console.WriteLine("CarId? ");
+            //int carsToGet = Convert.ToInt32(Console.ReadLine());
+            var result = carManager.GetCarDetails();
             Console.WriteLine(result.Message);
         }
     }

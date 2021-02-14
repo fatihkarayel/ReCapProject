@@ -1,12 +1,13 @@
 ﻿using Core.DataAccess;
+using DataAccess.Abstarct;
 using Entitites.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccess.Abstarct
+namespace DataAccess.Abstract
 {
-    public interface IBrandDal:IEntityRepository<Brand>
+    public interface ICustomerDal:IEntityRepository<Customer>
     {
     }
 }

@@ -27,5 +27,26 @@ namespace Business.Constants
         public static string ColorsListed="Renkler Listelendi.";
         public static string ColorDetail="Renk Detayı.";
         public static string ColorUpdated="Renk Güncellendi";
+        public static string RentalAdded ="Kiralama Başlatıldı.";
+        public static string RentalDeleted="Kiralama İptal edildi.";
+        public static string RentalsListed ="Kiralamalar listelendi";
+        public static string RentalUpdated="Kiralama Güncellendi.";
+        public static string CustomerAdded= "Müşteri Eklendi";
+        public static string CustomerDeleted ="Müşteri Silindi";
+        public static string CustomersListed ="Müşteriler Listelendi";
+        public static string CustomerUpdated ="Müşteri Güncellendi";
+        public static string UserAdded ="Kullanıcı Eklendi.";
+        public static string UserDeleted="Kullanıcı Silindi";
+        public static string UsersListed="Kullanıcılar Listelendi";
+        public static string UserUpdated="Kullanıcı Güncellendi.";
+        public static string UserListed ="Kullanıcı detayı.";
+        public static string CustomerListed="Müşteri detayı";
+        public static string rentalListed ="Kiralama listesi";
+        public static string RentalAvailableListed="Kiralabilecek araçlar listelendi. ";
+        public static string RentalDetailListed="Kiralamalar detaylı listelendi.";
+        public static string RentalByCarListed="Aracın kiralamaları listelendi";
+        public static string RentalAddedError="Araç teslim tarihi açıkken kiralanamaz";
+        public static string RentalUpdatedReturnDateError="Teslim tarihi güncellenemedi çünkü açık değil";
+        public static string RentalUpdatedReturnDate="Teslim tarihi güncellendi";
     }
 }
