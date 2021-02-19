@@ -48,5 +48,9 @@ namespace Business.Constants
         public static string RentalAddedError="Araç teslim tarihi açıkken kiralanamaz";
         public static string RentalUpdatedReturnDateError="Teslim tarihi güncellenemedi çünkü açık değil";
         public static string RentalUpdatedReturnDate="Teslim tarihi güncellendi";
+        public static string RentDateInvalid = "Geçersiz Kiralama Tarihi";
+        public static string CustomerInvalid = "Geçersiz Müşteri";
+        public static string CarInvalid = "Geçersiz Araç";
+        
     }
 }
