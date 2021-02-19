@@ -1,6 +1,5 @@
 ﻿using Business.Abstract;
 using Business.Conrete;
-using DataAccess.Abstarct;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Microsoft.AspNetCore.Builder;
